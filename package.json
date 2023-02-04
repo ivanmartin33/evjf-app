@@ -1,0 +1,17 @@
+{
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "devDependencies": {
+    "nuxt": "^3.1.2"
+  },
+  "dependencies": {
+    "@notionhq/client": "^2.2.3",
+    "@picocss/pico": "^1.5.7"
+  }
+}
