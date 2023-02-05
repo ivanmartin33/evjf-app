@@ -16,9 +16,11 @@ const handleActivityClick = async (activityId: string) => {
   await updateUserActivities(activityId, user.value.id, userActivities);
   loading.value = false;
 };
+
+onMounted(() => {});
 </script>
 <template>
-  <div>
+  <div class="flex justify-center items-start gap-5 flex-wrap">
     <ActivityCard
       v-for="activity in activities"
       :key="activity.id"

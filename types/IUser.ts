@@ -10,10 +10,11 @@ export interface User {
   activities?: { id: string }[]
 }
 
-export const DEFAULT_USER = {
+export const DEFAULT_USER: User = {
   id: "", // UUID
   name: "",
   email: "",
   total: 0,
-  status: ""
+  status: "",
+  isAdmin: false
 }

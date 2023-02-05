@@ -6,7 +6,9 @@ export const useStore = () => {
 
   const user = useState<User>('user', () => DEFAULT_USER)
 
+  const allUsers = useState<User[]>('allUsers', () => [])
+
   const total = useState<number>('total', () => 0)
 
-  return { activities, user, total }
+  return { activities, user, allUsers, total }
 }

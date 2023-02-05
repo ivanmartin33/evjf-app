@@ -3,7 +3,7 @@ import { Activity, DEFAULT_ACTIVITY_LIST } from '@/types/IActivity'
 
 export const useActivity = () => {
   const config = useRuntimeConfig();
-  const { getAllUsers } = useUser()
+  const { allUsers, getAllUsers } = useUser()
   const { getDatabase, updatePage } = useNotion()
   const { activities, user } = useStore()
 
@@ -18,13 +18,13 @@ export const useActivity = () => {
 
   const formatActivities = async (data: any): Promise<Activity[]> => {
     const activities: Activity[] = []
-    const allUsers = await getAllUsers(config.public.usersDatabase)
+    await getAllUsers(config.public.usersDatabase)
     for await (const el of data) {
 
       const users: any = []
       for (const item of el.properties.User.relation) {
         // await getUser(config.public.usersDatabase, item.id);
-        const userData = allUsers.find((ele) => ele.id === item.id)
+        const userData = allUsers.value.find((ele) => ele.id === item.id)
         users.push({ id: userData?.id, name: userData?.name });
       }
 

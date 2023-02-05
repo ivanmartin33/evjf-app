@@ -1,11 +1,9 @@
 import { User, DEFAULT_USER } from '@/types/IUser'
-import { Activity, DEFAULT_ACTIVITY_LIST } from '@/types/IActivity'
-
 
 export const useUser = () => {
   const config = useRuntimeConfig();
   const { getDatabase, updatePage } = useNotion()
-  const { user } = useStore()
+  const { user, allUsers } = useStore()
   const loading = ref(false)
 
 
@@ -20,13 +18,13 @@ export const useUser = () => {
     user.value = formatUser(result)
   };
 
-  const getAllUsers = async (databaseId: string): Promise<User[]> => {
+  const getAllUsers = async (databaseId: string): Promise<void> => {
     const response = await getDatabase(databaseId);
     const users: any = [];
     response.results.forEach((user: any) => {
       users.push(formatUser(user))
     })
-    return users
+    allUsers.value = users
   };
 
 
@@ -45,7 +43,7 @@ export const useUser = () => {
 
   const generateUsersLinks = async (databaseId: string): Promise<any> => {
     const users = await getAllUsers(databaseId)
-    users.forEach(async (user) => {
+    allUsers.value.forEach(async (user) => {
       await updatePage(user.id, {
         "Lien unique": {
           url: `http://localhost:3000/${user.id}`,
@@ -74,5 +72,5 @@ export const useUser = () => {
   }
 
 
-  return { user, getUser, getAllUsers, generateUsersLinks, updateUserStatus, loading }
+  return { user, allUsers, getUser, getAllUsers, generateUsersLinks, updateUserStatus, loading }
 }

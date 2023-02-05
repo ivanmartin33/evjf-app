@@ -6,19 +6,38 @@ definePageMeta({
 const userId = useRoute().path.replace("/", "");
 const config = useRuntimeConfig();
 
+const loading = ref(false);
 const { user, getUser, updateUserStatus } = useUser();
 
 await getUser(config.public.usersDatabase, userId);
 
 const handleUpdate = async () => {
+  loading.value = true;
   await updateUserStatus(user.value.id);
+  loading.value = false;
 };
 </script>
 <template>
-  <div class="container">
-    {{ user.name }}
-    <button type="button" @click="handleUpdate">Update</button>
-    <UITotal />
-    <ActivityList />
+  <div class="w-10/12 mx-auto my-0">
+    <div class="flex flex-row justify-between items-center w-full">
+      <h1 class="p-0 m-0">Bonjour {{ user.name }}</h1>
+      <UITotal />
+    </div>
+    <Suspense>
+      <template #fallback>
+        <div class="flex justify-center items-start gap-5 flex-wrap">
+          <ActivityCardPlaceholder />
+          <ActivityCardPlaceholder />
+          <ActivityCardPlaceholder />
+        </div>
+      </template>
+      <template #default>
+        <ActivityList />
+      </template>
+    </Suspense>
+
+    <UIButton class="sticky bottom-0" :loading="loading" @click="handleUpdate"
+      >Valider ma sélection</UIButton
+    >
   </div>
 </template>

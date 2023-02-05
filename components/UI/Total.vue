@@ -14,5 +14,7 @@ const getTotal = computed(() => {
 });
 </script>
 <template>
-  <div>{{ getTotal }} €</div>
+  <div class="bg-light md:text-xl p-2 rounded-sm w-fit h-fit text-dark">
+    Ton total : <span class="font-bold">{{ getTotal }}€</span>
+  </div>
 </template>
