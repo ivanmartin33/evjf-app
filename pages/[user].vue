@@ -1,23 +1,24 @@
 <script setup lang="ts">
+definePageMeta({
+  middleware: ["auth"],
+});
+
 const userId = useRoute().path.replace("/", "");
 const config = useRuntimeConfig();
-const user = ref();
 
-const activities = await useNotion().getActivities(config.activitiesDatabase);
+const { user, getUser, updateUserStatus } = useUser();
 
-try {
-  user.value = await useNotion().getUser(config.public.usersDatabase, userId);
-} catch (e) {
-  navigateTo("/");
-}
+await getUser(config.public.usersDatabase, userId);
+
+const handleUpdate = async () => {
+  await updateUserStatus(user.value.id);
+};
 </script>
 <template>
-  <div>
+  <div class="container">
     {{ user.name }}
+    <button type="button" @click="handleUpdate">Update</button>
+    <UITotal />
+    <ActivityList />
   </div>
-  <ActivityCard
-    v-for="activity in activities"
-    :key="activity.id"
-    :activity="activity"
-  />
 </template>

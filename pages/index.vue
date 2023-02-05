@@ -1,51 +1,44 @@
 <script setup lang="ts">
-const config = useRuntimeConfig();
-const user = ref();
+const id = ref("");
+const error = ref("");
+const { checkId } = useAuth();
 
-const activities = await useNotion().getActivities(config.activitiesDatabase);
-user.value = await useNotion().getUser(
-  config.public.usersDatabase,
-  "09c788f5-4f4a-4d24-93f8-c405d421dc86"
-);
+const handleSubmit = async () => {
+  const isValid = id.value.match(
+    /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/
+  );
 
-const handleUpdate = async () => {
-  await useNotion().updatePage(user.value.id, {
-    "Lien unique": {
-      url: "http://localhost:3000/09c788f5-4f4a-4d24-93f8-c405d421dc86",
-    },
-  });
-};
+  error.value = "";
 
-const handleActivityClick = async (activityId?: string) => {
-  const userActivities = user.value.activities.slice();
-  const result = userActivities.some((el: any) => el.id === activityId);
-
-  if (result) {
-    const index = userActivities.findIndex((el: any) => el.id === activityId);
-    userActivities.splice(index, 1);
-  } else {
-    userActivities.push({ id: activityId });
+  if (!isValid) {
+    error.value = "Le format de l'identifiant est invalide";
+    return;
   }
 
-  await useNotion().updatePage(user.value.id, {
-    Activités: {
-      relation: userActivities,
-    },
-  });
+  const isIdValid = await checkId(id.value);
 
-  user.value.activities = userActivities;
+  if (!isIdValid) {
+    error.value = "L'utilisateur n'existe pas";
+    return;
+  }
+
+  navigateTo(`/${id.value}`);
 };
 </script>
 
 <template>
   <div class="container">
-    <button @click="handleUpdate">Update</button>
-
-    <ActivityCard
-      v-for="activity in activities"
-      :key="activity.id"
-      :activity="activity"
-      @update="handleActivityClick"
-    />
+    <h2>Bienvenue</h2>
+    <form @submit.prevent="handleSubmit">
+      <label for="id">Identifiant</label>
+      <input
+        type="text"
+        name="id"
+        placeholder="Votre identifiant"
+        v-model="id"
+      />
+      <button type="submit">Se connecter</button>
+      <div v-if="error">{{ error }}</div>
+    </form>
   </div>
 </template>
