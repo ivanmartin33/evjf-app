@@ -13,12 +13,8 @@ jobs:
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }}
-        debug: true
         script: |
+          whoami
+          ls -al
           exec bash
-          cd evjf-app
-          git pull origin main
-          yarn install
-          yarn build
-          pm2 stop .output/server/index.mjs
-          pm2 start .output/server/index.mjs
+          npm -v
