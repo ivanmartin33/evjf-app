@@ -13,4 +13,6 @@ jobs:
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }}
-        script: yarn build
+        script: |
+          nvm use 18
+          yarn build
