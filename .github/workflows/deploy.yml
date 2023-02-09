@@ -16,6 +16,7 @@ jobs:
         script: |
             exec bash
             cd evjf-app
+            git pull origin main
             yarn install
             yarn build
             pm2 stop .output/server/index.mjs
