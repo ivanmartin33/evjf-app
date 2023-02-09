@@ -27,6 +27,7 @@ onMounted(() => {});
       :activity="activity"
       @update="handleActivityClick"
       :loading="activity.id === currentActivity ? loading : false"
+      :disabled="loading"
     />
   </div>
 </template>

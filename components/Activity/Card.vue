@@ -1,9 +1,16 @@
 <script setup lang="ts">
 import { Activity } from "@/types/IActivity";
-const props = defineProps<{
-  activity: Activity;
-  loading: boolean;
-}>();
+const props = withDefaults(
+  defineProps<{
+    activity: Activity;
+    loading?: boolean;
+    disabled?: boolean;
+  }>(),
+  {
+    loading: false,
+    disabled: false,
+  }
+);
 
 const { user } = useUser();
 defineEmits(["update"]);
@@ -50,21 +57,27 @@ const activityStatus = computed(() => {
 
       <div class="flex flex-col gap-2">
         <div class="text-sm">Participant.es:</div>
-        <ul class="inline-flex gap-2 p-0 m-0">
+
+        <TransitionGroup name="list" tag="ul" class="inline-flex gap-2 p-0 m-0">
           <li
             v-if="props.activity.userRelation![0] === undefined"
             class="list-none"
+            key="noOne"
           >
             <span class="text-xs text-dark bg-gray p-1 rounded-sm"
               >Aucun.es participant.es</span
             >
           </li>
-          <li class="list-none" v-for="user in props.activity.userRelation">
+          <li
+            class="list-none"
+            v-for="user in props.activity.userRelation"
+            :key="user.id"
+          >
             <span class="text-xs text-dark bg-teal p-1 rounded-sm">{{
               user.name
             }}</span>
           </li>
-        </ul>
+        </TransitionGroup>
       </div>
 
       <UIButton
@@ -72,9 +85,28 @@ const activityStatus = computed(() => {
         class="outline"
         :class="activityStatus === 'Ajouter' ? '' : 'secondary'"
         :loading="loading"
+        :disabled="disabled"
       >
         {{ activityStatus }}
       </UIButton>
     </footer>
   </article>
 </template>
+
+<style>
+.list-move, /* apply transition to moving elements */
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.5s ease;
+}
+
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.list-leave-active {
+  position: absolute;
+}
+</style>

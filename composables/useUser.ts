@@ -19,6 +19,10 @@ export const useUser = () => {
   };
 
   const getAllUsers = async (databaseId: string): Promise<void> => {
+
+    if (allUsers.value.length > 0) {
+      return
+    }
     const response = await getDatabase(databaseId);
     const users: any = [];
     response.results.forEach((user: any) => {

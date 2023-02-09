@@ -56,18 +56,19 @@ export const useActivity = () => {
     // update activities store
     user.value.activities = userActivities;
 
-    const index = activities.value.findIndex((el) => el.id === activityId)
+    // const index = activities.value.findIndex((el) => el.id === activityId)
 
-    const relation = activities.value[index].userRelation
-    const indexRelation = relation?.findIndex((el) => el.id === userId)
+    // const relation = activities.value[index].userRelation
+    // const indexRelation = relation?.findIndex((el) => el.id === userId)
 
 
-    if (indexRelation !== (-1)) {
-      activities.value[index].userRelation?.splice(indexRelation!, 1)
-    } else {
-      activities.value[index].userRelation?.push({ id: activityId, name: user.value.name })
-    }
+    // if (indexRelation !== (-1)) {
+    //   activities.value[index].userRelation?.splice(indexRelation!, 1)
+    // } else {
+    //   activities.value[index].userRelation?.push({ id: activityId, name: user.value.name })
+    // }
 
+    // upadte notion
     await updatePage(userId, {
       Activités: {
         relation: userActivities,
