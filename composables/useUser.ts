@@ -51,7 +51,7 @@ export const useUser = () => {
     allUsers.value.forEach(async (user) => {
       await updatePage(user.id, {
         "Lien unique": {
-          url: `http://localhost:3000/${user.id}`,
+          url: `${config.public.loginBaseUrl}/${user.id}`,
         },
       });
     })
