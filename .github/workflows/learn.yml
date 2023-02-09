@@ -15,6 +15,5 @@ jobs:
         port: ${{ secrets.PORT }}
         script: |
           cd evjf-app
-          ls -al
-          yarn build
+          yarn -v
           pm2 restart index
