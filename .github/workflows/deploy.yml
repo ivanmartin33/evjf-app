@@ -15,4 +15,5 @@ jobs:
         key: ${{ secrets.key }}
         port: ${{ secrets.PORT }}
         script: |
-          bash ./launch.sh
+          exec bash
+          ./launch.sh
