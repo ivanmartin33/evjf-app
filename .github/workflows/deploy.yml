@@ -14,6 +14,4 @@ jobs:
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.key }}
         port: ${{ secrets.PORT }}
-        script: |
-          /usr/bin/env
-          ./launch.sh
+        script: ./launch.sh
