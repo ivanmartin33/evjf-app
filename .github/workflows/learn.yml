@@ -14,6 +14,7 @@ jobs:
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }}
         script: |
+          source ~/.bashrc
           cd evjf-app
           npm -v
           pm2 restart index
