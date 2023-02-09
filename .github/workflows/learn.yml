@@ -14,7 +14,8 @@ jobs:
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }}
         script: |
-          bash
+          exec bash
+          whoami
           cd evjf-app
           yarn install
           yarn build
