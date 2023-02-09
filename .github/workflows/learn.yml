@@ -15,4 +15,4 @@ jobs:
         port: ${{ secrets.PORT }}
         script: |
           source ~/.bashrc
-          npm -v
+          whereis npm
