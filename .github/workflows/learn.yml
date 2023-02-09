@@ -14,5 +14,5 @@ jobs:
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }}
         script: |
-          nvm use 18
           yarn build
+          pm2 restart index
