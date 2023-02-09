@@ -14,9 +14,4 @@ jobs:
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }}
         script: |
-          cd evjf-app
-          git pull
-          export NVM_DIR=~/.nvm
-          source ~/.nvm/nvm.sh
-          npm -v
-          pm2 restart index
+          ls -al
