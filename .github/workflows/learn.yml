@@ -14,6 +14,7 @@ jobs:
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }}
         script: |
+          exec bash
           export NVM_DIR=~/.nvm
           source ~/.nvm/nvm.sh
           npm --help
