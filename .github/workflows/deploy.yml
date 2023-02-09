@@ -12,8 +12,7 @@ jobs:
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
-        password: ${{ secrets.PASSWORD }}
+        key: ${{ secrets.key }}
         port: ${{ secrets.PORT }}
         script: |
-          exec bash
-          ./launch.sh
+          bash ./launch.sh
