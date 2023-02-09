@@ -14,11 +14,9 @@ jobs:
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }}
         script: |
-            ls -al
             exec bash
-            whoami
             cd evjf-app
             yarn install
             yarn build
-            echo "cabal"
-            pm2 restart .output/server/index.mjs
+            pm2 stop .output/server/index.mjs
+            pm2 start .output/server/index.mjs
