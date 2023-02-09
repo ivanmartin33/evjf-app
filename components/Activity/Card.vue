@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Activity } from "@/types/IActivity";
+
 const props = withDefaults(
   defineProps<{
     activity: Activity;
@@ -70,12 +71,19 @@ const activityStatus = computed(() => {
           </li>
           <li
             class="list-none"
-            v-for="user in props.activity.userRelation"
-            :key="user.id"
+            v-for="userRe in props.activity.userRelation"
+            :key="userRe.id"
+            :class="userRe.id === user.id && loading ? 'opacity-50' : ''"
           >
-            <span class="text-xs text-dark bg-teal p-1 rounded-sm">{{
-              user.name
-            }}</span>
+            <span
+              class="text-xs p-1 rounded-sm"
+              :class="
+                userRe.id === user.id
+                  ? 'bg-pink-600 text-white'
+                  : 'bg-teal text-dark'
+              "
+              >{{ userRe.name }}</span
+            >
           </li>
         </TransitionGroup>
       </div>

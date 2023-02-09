@@ -7,9 +7,7 @@ const userId = useRoute().path.replace("/", "");
 const config = useRuntimeConfig();
 
 const loading = ref(false);
-const { user, getUser, updateUserStatus } = useUser();
-
-await getUser(config.public.usersDatabase, userId);
+const { user, updateUserStatus } = useUser();
 
 const handleUpdate = async () => {
   loading.value = true;

@@ -1,6 +1,6 @@
 export const useAuth = () => {
   const config = useRuntimeConfig()
-  const { allUsers, getAllUsers } = useUser()
+  const { user, allUsers, getAllUsers } = useUser()
 
   const checkId = async (userId: string): Promise<boolean> => {
 
@@ -10,6 +10,7 @@ export const useAuth = () => {
 
     const valid = allUsers.value.find((user) => user.id === userId)
 
+    user.value = valid!
     if (valid) return true
     else return false
   }
