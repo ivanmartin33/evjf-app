@@ -19,4 +19,5 @@ jobs:
           cd evjf-app
           yarn install
           yarn build
-          pm2 restart index
+          echo "cabal"
+          pm2 restart .output/server/index.mjs
