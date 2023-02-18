@@ -13,7 +13,6 @@
     "nuxt": "^3.1.2"
   },
   "dependencies": {
-    "@notionhq/client": "^2.2.3",
-    "@picocss/pico": "^1.5.7"
+    "@notionhq/client": "^2.2.3"
   }
 }

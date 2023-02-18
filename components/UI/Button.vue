@@ -13,6 +13,7 @@ const props = withDefaults(
     v-bind="$attrs"
     :aria-busy="loading"
     :disabled="loading"
+    class="bg-gray-500 text-white font-bold py-2 px-4 rounded-sm cursor-pointer border-none"
     :class="loading ? 'cursor-not-allowed' : ''"
   >
     <slot />

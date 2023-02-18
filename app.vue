@@ -1,50 +1,9 @@
 <script setup lang="ts">
-import "@picocss/pico/";
-import "@unocss/reset/normalize.css";
+// import "@unocss/reset/eric-meyer.css";
 </script>
 
 <template>
-  <div class="mt-5">
+  <div class="font-sans h-full">
     <NuxtPage />
   </div>
 </template>
-
-<style>
-/* Pink Light scheme (Default) */
-/* Can be forced with data-theme="light" */
-[data-theme="light"],
-:root:not([data-theme="dark"]) {
-  --primary: #d81b60;
-  --primary-hover: #c2185b;
-  --primary-focus: rgba(216, 27, 96, 0.125);
-  --primary-inverse: #fff;
-}
-
-/* Pink Dark scheme (Auto) */
-/* Automatically enabled if user has Dark mode enabled */
-@media only screen and (prefers-color-scheme: dark) {
-  :root:not([data-theme]) {
-    --primary: #d81b60;
-    --primary-hover: #e91e63;
-    --primary-focus: rgba(216, 27, 96, 0.25);
-    --primary-inverse: #fff;
-  }
-}
-
-/* Pink Dark scheme (Forced) */
-/* Enabled if forced with data-theme="dark" */
-[data-theme="dark"] {
-  --primary: #d81b60;
-  --primary-hover: #e91e63;
-  --primary-focus: rgba(216, 27, 96, 0.25);
-  --primary-inverse: #fff;
-}
-
-/* Pink (Common styles) */
-:root {
-  --form-element-active-border-color: var(--primary);
-  --form-element-focus-color: var(--primary-focus);
-  --switch-color: var(--primary-inverse);
-  --switch-checked-background-color: var(--primary);
-}
-</style>

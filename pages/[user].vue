@@ -17,10 +17,8 @@ const handleUpdate = async () => {
 </script>
 <template>
   <div class="w-10/12 mx-auto my-0">
-    <div
-      class="flex flex-row justify-between items-center bg-gradient-to-b from-[#12191F] to-transparent w-full sticky top-0 z-10 p-5"
-    >
-      <h1 class="p-0 m-0">Bonjour {{ user.name }}</h1>
+    <div class="flex flex-row justify-between items-center w-full sticky top-0 z-10 p-5">
+      <h1>Bonjour {{ user.name }}</h1>
       <UITotal />
     </div>
     <Suspense>

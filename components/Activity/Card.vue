@@ -17,9 +17,7 @@ const { user } = useUser();
 defineEmits(["update"]);
 
 const activityStatus = computed(() => {
-  const result = props.activity.userRelation?.find(
-    (el) => el.id === user.value.id
-  );
+  const result = props.activity.userRelation?.find((el) => el.id === user.value.id);
 
   if (result === undefined) {
     return "Ajouter";
@@ -29,10 +27,8 @@ const activityStatus = computed(() => {
 });
 </script>
 <template>
-  <article
-    class="w-full lg:w-xs border-solid border-1 border-gray-700 z-0 scale-100 hover:scale-102 hover:shadow-lg hover:shadow-opacity-50 duration-200"
-  >
-    <header class="overflow-hidden relative h-30">
+  <article class="w-full lg:w-xs z-0 duration-200 rounded-md overflow-hidden">
+    <header class="overflow-hidden relative h-30 p-5">
       <div class="z-2 relative">
         <h2>{{ activity.name }}</h2>
       </div>
@@ -47,11 +43,11 @@ const activityStatus = computed(() => {
       </div>
     </header>
 
-    <div>
+    <div class="p-10">
       {{ activity.description }}
     </div>
 
-    <footer class="flex flex-col gap-5">
+    <footer class="flex flex-col gap-5 p-10">
       <div class="text-sm text-dark p-1 rounded-sm bg-light-700 w-fit self-end">
         <span class="font-bold">{{ activity.price }}€</span>
       </div>
@@ -78,9 +74,7 @@ const activityStatus = computed(() => {
             <span
               class="text-xs p-1 rounded-sm"
               :class="
-                userRe.id === user.id
-                  ? 'bg-pink-600 text-white'
-                  : 'bg-teal text-dark'
+                userRe.id === user.id ? 'bg-pink-600 text-white' : 'bg-teal text-dark'
               "
               >{{ userRe.name }}</span
             >
