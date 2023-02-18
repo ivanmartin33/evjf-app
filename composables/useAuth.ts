@@ -1,28 +1,32 @@
+import { useUserStore } from "~~/stores/globalStore";
+import { User } from "~~/types/IUser";
 export const useAuth = () => {
-  const config = useRuntimeConfig()
-  const { user, allUsers, getAllUsers } = useUser()
+	const config = useRuntimeConfig();
+	const { fetchAllUsers } = useUser();
+	const { user, allUsers } = storeToRefs(useUserStore());
 
-  const checkId = async (userId: string): Promise<boolean> => {
+	const checkId = async (userId: string): Promise<boolean> => {
+		let fetchUsers: User[] = [];
+		if (allUsers.value.length === 0) {
+			fetchUsers = await fetchAllUsers(config.public.usersDatabase);
+		}
 
-    if (allUsers.value.length === 0) {
-      await getAllUsers(config.public.usersDatabase)
-    }
+		// find valid user and set store
+		const validUser = fetchUsers.find((el) => el.id === userId);
+		user.value = validUser!;
+		allUsers.value = fetchUsers;
+		if (validUser) return true;
+		else return false;
+	};
 
-    const valid = allUsers.value.find((user) => user.id === userId)
+	const checkAdmin = async (userId: string): Promise<boolean> => {
+		await fetchAllUsers(config.public.usersDatabase);
 
-    user.value = valid!
-    if (valid) return true
-    else return false
-  }
+		const validUser = allUsers.value.find((u) => u.id === userId);
 
-  const checkAdmin = async (userId: string): Promise<boolean> => {
-    await getAllUsers(config.public.usersDatabase)
+		if (!validUser?.isAdmin) return false;
+		return true;
+	};
 
-    const validUser = allUsers.value.find((u) => u.id === userId)
-
-    if (!validUser?.isAdmin) return false
-    return true
-  }
-
-  return { checkId, checkAdmin }
-}
+	return { checkId, checkAdmin };
+};

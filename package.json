@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev",
+    "dev": "nuxt dev --port 8001",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
@@ -10,10 +10,12 @@
   "devDependencies": {
     "@unocss/nuxt": "^0.49.4",
     "@unocss/reset": "^0.49.4",
+    "notion-api-types": "^1.0.0",
     "nuxt": "^3.1.2"
   },
   "dependencies": {
     "@notionhq/client": "^2.2.3",
-    "@picocss/pico": "^1.5.7"
+    "@picocss/pico": "^1.5.7",
+    "@pinia/nuxt": "^0.4.6"
   }
 }

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useUserStore } from "~~/stores/globalStore";
 import { Activity } from "@/types/IActivity";
 
 const props = withDefaults(
@@ -13,20 +14,21 @@ const props = withDefaults(
   }
 );
 
-const { user } = useUser();
+const { user } = storeToRefs(useUserStore());
 defineEmits(["update"]);
 
-const activityStatus = computed(() => {
-  const result = props.activity.userRelation?.find(
-    (el) => el.id === user.value.id
-  );
+// const participants = getActivityParticipants(props.activity.id);
 
-  if (result === undefined) {
-    return "Ajouter";
-  }
+const activityStatus = ref("Cabala");
+// const activityStatus = computed(() => {
+//   const result = props.activity.userRelation?.find((el) => el.id === user.value.id);
 
-  return "Retirer";
-});
+//   if (result === undefined) {
+//     return "Ajouter";
+//   }
+
+//   return "Retirer";
+// });
 </script>
 <template>
   <article
@@ -56,37 +58,7 @@ const activityStatus = computed(() => {
         <span class="font-bold">{{ activity.price }}€</span>
       </div>
 
-      <div class="flex flex-col gap-2">
-        <div class="text-sm">Participant.es:</div>
-
-        <TransitionGroup name="list" tag="ul" class="inline-flex gap-2 p-0 m-0">
-          <li
-            v-if="props.activity.userRelation![0] === undefined"
-            class="list-none"
-            key="noOne"
-          >
-            <span class="text-xs text-dark bg-gray p-1 rounded-sm"
-              >Aucun.es participant.es</span
-            >
-          </li>
-          <li
-            class="list-none"
-            v-for="userRe in props.activity.userRelation"
-            :key="userRe.id"
-            :class="userRe.id === user.id && loading ? 'opacity-50' : ''"
-          >
-            <span
-              class="text-xs p-1 rounded-sm"
-              :class="
-                userRe.id === user.id
-                  ? 'bg-pink-600 text-white'
-                  : 'bg-teal text-dark'
-              "
-              >{{ userRe.name }}</span
-            >
-          </li>
-        </TransitionGroup>
-      </div>
+      <ActivityParticipants :participants="props.activity.userRelation" />
 
       <UIButton
         @click="$emit('update', activity.id)"
@@ -100,21 +72,3 @@ const activityStatus = computed(() => {
     </footer>
   </article>
 </template>
-
-<style>
-.list-move, /* apply transition to moving elements */
-.list-enter-active,
-.list-leave-active {
-  transition: all 0.5s ease;
-}
-
-.list-enter-from,
-.list-leave-to {
-  opacity: 0;
-  transform: translateY(30px);
-}
-
-.list-leave-active {
-  position: absolute;
-}
-</style>

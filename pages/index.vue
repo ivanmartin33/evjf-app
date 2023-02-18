@@ -36,12 +36,7 @@ const handleSubmit = async () => {
     <form @submit.prevent="handleSubmit">
       <label for="id">
         Identifiant
-        <input
-          type="text"
-          name="id"
-          placeholder="Votre identifiant"
-          v-model="id"
-        />
+        <input type="text" name="id" placeholder="Votre identifiant" v-model="id" />
       </label>
       <UIButton type="submit" :loading="loading">Se connecter</UIButton>
       <small v-if="error">{{ error }}</small>

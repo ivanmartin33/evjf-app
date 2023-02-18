@@ -1,17 +1,17 @@
 <script setup lang="ts">
+import { useUserStore } from "~~/stores/globalStore";
 definePageMeta({
   middleware: ["auth"],
 });
 
-const userId = useRoute().path.replace("/", "");
 const config = useRuntimeConfig();
-
 const loading = ref(false);
-const { user, updateUserStatus } = useUser();
+const { updateUserStatus } = useUser();
+const { user } = useUserStore();
 
 const handleUpdate = async () => {
   loading.value = true;
-  await updateUserStatus(user.value.id);
+  await updateUserStatus(user.id);
   loading.value = false;
 };
 </script>

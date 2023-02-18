@@ -1,86 +1,81 @@
-import { Activity, DEFAULT_ACTIVITY_LIST } from '@/types/IActivity'
-
+import type { Page, PageProperty } from "notion-api-types/responses";
+import { useActivityStore, useUserStore } from "@/stores/globalStore";
+import { Activity, DEFAULT_ACTIVITY_LIST } from "@/types/IActivity";
 
 export const useActivity = () => {
-  const config = useRuntimeConfig();
-  const { allUsers, getAllUsers } = useUser()
-  const { getDatabase, updatePage } = useNotion()
-  const { activities, user } = useStore()
+	const config = useRuntimeConfig();
+	const { getDatabase, updatePage } = useNotion();
+	const loading = ref(false);
+	const { allUsers, user } = storeToRefs(useUserStore());
+	const { activities } = storeToRefs(useActivityStore());
+	const { fetchAllUsers } = useUser();
 
-  const loading = ref(false)
+	const getActivities = async (databaseId: string): Promise<void> => {
+		const response = await getDatabase(databaseId);
+		activities.value = await formatActivities(response.results);
+	};
 
-  const getActivities = async (databaseId: string): Promise<void> => {
+	const formatActivities = async (activitiesData: any): Promise<Activity[]> => {
+		await fetchAllUsers(config.public.usersDatabase);
 
-    const response = await getDatabase(databaseId);
+		return activitiesData.map((el: any) => {
+			const userRelation = el.properties.User.relation.map((item: any) => {
+				const userData = allUsers.value.find((ele) => ele.id === item.id);
+				return { id: userData?.id, name: userData?.name };
+			});
 
-    activities.value = await formatActivities(response.results)
-  };
+			const image = el.properties.Image.files[0]?.file.url || null;
+			const description = el.properties.Description.rich_text[0].text.content;
 
-  const formatActivities = async (data: any): Promise<Activity[]> => {
-    const activities: Activity[] = []
-    await getAllUsers(config.public.usersDatabase)
-    for await (const el of data) {
+			return {
+				id: el.id,
+				name: el.properties.Nom.title[0].text.content,
+				day: el.properties.Jour.select.name,
+				price: el.properties.Prix.number,
+				image,
+				description,
+				userRelation,
+			};
+		});
+	};
 
-      const users: any = []
-      for (const item of el.properties.User.relation) {
-        // await getUser(config.public.usersDatabase, item.id);
-        const userData = allUsers.value.find((ele) => ele.id === item.id)
-        users.push({ id: userData?.id, name: userData?.name });
-      }
+	const updateUserActivities = async (
+		activityId: string,
+		userId: string,
+		userActivities: any
+	): Promise<void> => {
+		const result = userActivities.some((el: any) => el.id === activityId);
 
-      activities.push({
-        id: el.id,
-        name: el.properties.Nom.title[0].text.content,
-        day: el.properties.Jour.select.name,
-        price: el.properties.Prix.number,
-        image: el.properties.Image.files[0] !== undefined ? el.properties.Image.files[0].file.url : null,
-        description: el.properties.Description.rich_text[0].text.content,
-        userRelation: users
-      })
-    };
+		if (result) {
+			const index = userActivities.findIndex((el: any) => el.id === activityId);
+			userActivities.splice(index, 1);
+		} else {
+			userActivities.push({ id: activityId });
+		}
 
-    return activities
-  }
+		// update activities store
+		user.value.activities = userActivities;
 
-  const updateUserActivities = async (activityId: string, userId: string, userActivities: any): Promise<void> => {
+		// const index = activities.value.findIndex((el) => el.id === activityId)
 
-    const result = userActivities.some((el: any) => el.id === activityId);
+		// const relation = activities.value[index].userRelation
+		// const indexRelation = relation?.findIndex((el) => el.id === userId)
 
-    if (result) {
-      const index = userActivities.findIndex((el: any) => el.id === activityId);
-      userActivities.splice(index, 1);
-    } else {
-      userActivities.push({ id: activityId });
-    }
+		// if (indexRelation !== (-1)) {
+		//   activities.value[index].userRelation?.splice(indexRelation!, 1)
+		// } else {
+		//   activities.value[index].userRelation?.push({ id: activityId, name: user.value.name })
+		// }
 
-    // update activities store
-    user.value.activities = userActivities;
+		// upadte notion
+		await updatePage(userId, {
+			Activités: {
+				relation: userActivities,
+			},
+		});
 
-    // const index = activities.value.findIndex((el) => el.id === activityId)
+		await getActivities(config.public.activitiesDatabase);
+	};
 
-    // const relation = activities.value[index].userRelation
-    // const indexRelation = relation?.findIndex((el) => el.id === userId)
-
-
-    // if (indexRelation !== (-1)) {
-    //   activities.value[index].userRelation?.splice(indexRelation!, 1)
-    // } else {
-    //   activities.value[index].userRelation?.push({ id: activityId, name: user.value.name })
-    // }
-
-    // upadte notion
-    await updatePage(userId, {
-      Activités: {
-        relation: userActivities,
-      },
-    });
-
-    await getActivities(config.public.activitiesDatabase);
-
-  }
-
-
-  return { activities, getActivities, updateUserActivities, loading }
-}
-
-
+	return { activities, getActivities, updateUserActivities, loading };
+};
