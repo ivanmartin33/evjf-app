@@ -1,6 +1,19 @@
 <script setup lang="ts">
 import "@picocss/pico/";
 import "@unocss/reset/normalize.css";
+import { useActivityStore, useUserStore } from "./stores/globalStore";
+import { User } from "./types/IUser";
+
+// // init app
+// const { data: us, error: usError } = await useFetch("/api/users");
+// const { data: ac, error: acError } = await useFetch("/api/activities");
+
+// // init stores
+// const { user, allUsers } = storeToRefs(useUserStore());
+// const { activities } = storeToRefs(useActivityStore());
+
+// allUsers.value = us.value as User[];
+// activities.value = ac.value;
 </script>
 
 <template>

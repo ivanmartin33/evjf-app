@@ -1,10 +1,10 @@
+import { sanitizeActivities } from "../utils/activity";
 export default defineEventHandler(async (event) => {
-	const body = await readBody(event);
 	const config = useRuntimeConfig();
 
 	try {
-		const res = await $fetch(
-			`https://api.notion.com/v1/databases/${body.databaseId}/query`,
+		const res: any = await $fetch(
+			`https://api.notion.com/v1/databases/${config.public.activitiesDatabase}/query`,
 			{
 				method: "POST",
 				mode: "no-cors",
@@ -16,8 +16,11 @@ export default defineEventHandler(async (event) => {
 			}
 		);
 
-		return res;
+		const activities = sanitizeActivities(res.results);
+
+		return activities;
 	} catch (e: any) {
+		console.log(e);
 		sendError(event, e);
 	}
 });

@@ -17,18 +17,15 @@ const props = withDefaults(
 const { user } = storeToRefs(useUserStore());
 defineEmits(["update"]);
 
-// const participants = getActivityParticipants(props.activity.id);
+const activityStatus = computed(() => {
+  const result = props.activity.userRelation?.find((el) => el.id === user.value.id);
 
-const activityStatus = ref("Cabala");
-// const activityStatus = computed(() => {
-//   const result = props.activity.userRelation?.find((el) => el.id === user.value.id);
+  if (result === undefined) {
+    return "Ajouter";
+  }
 
-//   if (result === undefined) {
-//     return "Ajouter";
-//   }
-
-//   return "Retirer";
-// });
+  return "Retirer";
+});
 </script>
 <template>
   <article
@@ -57,8 +54,9 @@ const activityStatus = ref("Cabala");
       <div class="text-sm text-dark p-1 rounded-sm bg-light-700 w-fit self-end">
         <span class="font-bold">{{ activity.price }}€</span>
       </div>
-
-      <ActivityParticipants :participants="props.activity.userRelation" />
+      <ClientOnly>
+        <ActivityParticipants :participants="props.activity.userRelation" />
+      </ClientOnly>
 
       <UIButton
         @click="$emit('update', activity.id)"

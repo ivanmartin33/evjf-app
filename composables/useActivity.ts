@@ -77,5 +77,5 @@ export const useActivity = () => {
 		await getActivities(config.public.activitiesDatabase);
 	};
 
-	return { activities, getActivities, updateUserActivities, loading };
+	return { getActivities, updateUserActivities, loading };
 };

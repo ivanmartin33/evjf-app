@@ -15,6 +15,7 @@ const handleUpdate = async () => {
   loading.value = false;
 };
 </script>
+
 <template>
   <div class="w-10/12 mx-auto my-0">
     <div

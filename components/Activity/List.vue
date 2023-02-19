@@ -1,16 +1,17 @@
 <script setup lang="ts">
+import { Activity } from "~~/types/IActivity";
 import { useUserStore, useActivityStore } from "~~/stores/globalStore";
 const { user } = useUserStore();
-
 const { activities } = storeToRefs(useActivityStore());
-const { getActivities, updateUserActivities } = useActivity();
+const { updateUserActivities } = useActivity();
 
 const config = useRuntimeConfig();
-
-await getActivities(config.public.activitiesDatabase);
-
 const loading = ref(false);
 const currentActivity = ref();
+
+const { data, error } = await useFetch("/api/activities");
+
+activities.value = data.value;
 
 const handleUpdate = async (activityId: string) => {
   loading.value = true;
@@ -19,8 +20,6 @@ const handleUpdate = async (activityId: string) => {
   await updateUserActivities(activityId, user.id, user.activities);
   loading.value = false;
 };
-
-onMounted(() => {});
 </script>
 <template>
   <div v-if="activities" class="flex justify-center items-start gap-5 flex-wrap">
