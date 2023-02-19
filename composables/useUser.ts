@@ -1,62 +1,10 @@
-import { User } from "@/types/IUser";
+import { useUserStore } from '@/stores/globalStore'
 
 export const useUser = () => {
 	const config = useRuntimeConfig();
-	const { getDatabase, updatePage } = useNotion();
-	const { user, allUsers } = useStore();
+	const { updatePage } = useNotion();
+	const { user, allUsers } = storeToRefs(useUserStore());
 	const loading = ref(false);
-
-	const fetchUser = async (
-		databaseId: string,
-		userId: string
-	): Promise<void> => {
-		const res = await getDatabase(databaseId);
-
-		const result = res.results.find((el: any) => el.id === userId);
-
-		if (result === undefined) {
-			throw Error("Aucun participant pour ce lien !");
-		}
-		user.value = formatUser(result);
-	};
-
-	const fetchAllUsers = async (databaseId: string): Promise<User[]> => {
-		const response = await getDatabase(databaseId);
-		const users: any = [];
-		response.results.forEach((el: any) => {
-			const formattedUser = formatUser(el);
-			users.push(formattedUser);
-		});
-		allUsers.value = users;
-		return users;
-	};
-
-	const getAllUsers = async (): Promise<User[]> => {
-		try {
-			const users = await $fetch('/api/users')
-			allUsers.value = users;
-			return users;
-		} catch (err) {
-			console.log(err)
-			return []
-		}
-	};
-
-	const formatUser = (data: any): User => {
-		const user: User = {
-			id: data.id,
-			name: data.properties.Nom.title[0].text.content,
-			email: data.properties.email.email,
-			total:
-				data.properties["Prix Total"] === null
-					? data.properties["Prix Total"].number
-					: null,
-			activities: data.properties["Activités"].relation,
-			isAdmin: data.properties.isAdmin.checkbox,
-			status: data.properties.Status.status.name,
-		};
-		return user;
-	};
 
 	const generateUsersLinks = async (): Promise<void> => {
 		await Promise.all(
@@ -82,16 +30,29 @@ export const useUser = () => {
 					name: status,
 				},
 			},
-		});
+		})
 
-		await fetchUser(config.public.usersDatabase, userId);
+		await updateUsers();
 	};
 
+
+	const updateUsers = async (): Promise<void> => {
+		const response = await $fetch('/api/users')
+		allUsers.value = response
+
+		updateUser(user.value.id)
+	};
+
+	const updateUser = (userId: string): void => {
+		// find valid user and set store
+		const validUser = allUsers.value.find((el) => el.id === userId);
+		user.value = validUser!;
+	};
+
+
 	return {
-		fetchUser,
-		formatUser,
-		fetchAllUsers,
-		getAllUsers,
+		updateUsers,
+		updateUser,
 		generateUsersLinks,
 		updateUserStatus,
 		loading,

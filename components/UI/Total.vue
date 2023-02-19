@@ -1,12 +1,14 @@
 <script setup lang="ts">
-const { user, activities, total } = useStore();
+import { useUserStore, useActivityStore } from "@/stores/globalStore";
+const { user } = storeToRefs(useUserStore());
+const { total, activities } = storeToRefs(useActivityStore());
 
 const getTotal = computed(() => {
   let totalUser = 0;
-  activities.value.forEach((el) => {
+  activities.value?.forEach((el) => {
     const result = el.userRelation?.some((re) => re.id === user.value.id);
     if (result) {
-      totalUser += el.price;
+      totalUser += el.price!;
     }
   });
   total.value = totalUser;

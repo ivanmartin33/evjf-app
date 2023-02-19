@@ -7,7 +7,7 @@ export interface User {
   email?: string
   total?: number
   status?: string
-  activities?: { id: string }[]
+  activities?: { id?: string }[]
 }
 
 export const DEFAULT_USER: User = {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useUserStore } from "~~/stores/globalStore";
+import { useUserStore, useActivityStore } from "~~/stores/globalStore";
 import { Activity } from "@/types/IActivity";
 
 const props = withDefaults(
@@ -14,11 +14,14 @@ const props = withDefaults(
   }
 );
 
+const { getActivityParticipants } = useActivityStore();
 const { user } = storeToRefs(useUserStore());
 defineEmits(["update"]);
 
 const activityStatus = computed(() => {
-  const result = props.activity.userRelation?.find((el) => el.id === user.value.id);
+  const result = props.activity.userRelation?.find(
+    (el) => el.id === user.value.id
+  );
 
   if (result === undefined) {
     return "Ajouter";
@@ -55,7 +58,9 @@ const activityStatus = computed(() => {
         <span class="font-bold">{{ activity.price }}€</span>
       </div>
       <ClientOnly>
-        <ActivityParticipants :participants="props.activity.userRelation" />
+        <ActivityParticipants
+          :participants="getActivityParticipants(props.activity.id)"
+        />
       </ClientOnly>
 
       <UIButton

@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { useUserStore } from "~~/stores/globalStore";
+import { useUserStore, useActivityStore } from "~~/stores/globalStore";
 
 const { user } = storeToRefs(useUserStore());
 
 const props = withDefaults(
   defineProps<{
-    participants: { id: string; name: string }[] | undefined;
+    participants: { id?: string; name?: string }[] | undefined;
     loading?: boolean;
   }>(),
   {
@@ -19,7 +19,11 @@ const props = withDefaults(
 
     <div class="relative w-full">
       <TransitionGroup name="list" tag="ul" class="inline-flex gap-2 p-0 m-0">
-        <li v-if="participants && participants.length <= 0" class="list-none" key="noOne">
+        <li
+          v-if="participants && participants.length <= 0"
+          class="list-none"
+          key="noOne"
+        >
           <span class="text-xs text-dark bg-gray p-1 rounded-sm"
             >Aucun.es participant.es</span
           >
@@ -33,7 +37,9 @@ const props = withDefaults(
           <div
             class="text-xs p-1 rounded-sm"
             :class="
-              userRe.id === user.id ? 'bg-pink-600 text-white' : 'bg-teal text-dark'
+              userRe.id === user.id
+                ? 'bg-pink-600 text-white'
+                : 'bg-teal text-dark'
             "
           >
             {{ userRe.name }}
