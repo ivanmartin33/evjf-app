@@ -28,7 +28,7 @@ export const useActivityStore = defineStore("activity", () => {
 
 export const useUserStore = defineStore("user", () => {
 	const user = ref<User>(DEFAULT_USER);
-	const allUsers = ref<User[]>();
+	const allUsers = ref<User[]>([]);
 
 	const getOtherUsers = (databaseId: string): void => {
 		const users = allUsers.value?.filter((el) => el.id !== user.value.id);

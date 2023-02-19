@@ -31,6 +31,17 @@ export const useUser = () => {
 		return users;
 	};
 
+	const getAllUsers = async (): Promise<User[]> => {
+		try {
+			const users = await $fetch('/api/users')
+			allUsers.value = users;
+			return users;
+		} catch (err) {
+			console.log(err)
+			return []
+		}
+	};
+
 	const formatUser = (data: any): User => {
 		const user: User = {
 			id: data.id,
@@ -80,6 +91,7 @@ export const useUser = () => {
 		fetchUser,
 		formatUser,
 		fetchAllUsers,
+		getAllUsers,
 		generateUsersLinks,
 		updateUserStatus,
 		loading,
